@@ -1,9 +1,5 @@
 name: Publish
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
   push:
     branches:
       - ci-cd-test
@@ -11,7 +7,7 @@ on:
 env:
   NAMESPACE: snetlamu
   COLLECTION_NAME: fmcansible
-  VERSION: 0.9.4
+  VERSION: 0.9.5
 
 jobs:
   build-and-publish:
