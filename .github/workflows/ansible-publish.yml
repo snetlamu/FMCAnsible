@@ -1,0 +1,39 @@
+name: Publish
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+  push:
+    branches:
+      - ci-cd-test
+
+env:
+  NAMESPACE: snetlamu
+  COLLECTION_NAME: fmcansible
+  VERSION: 0.9.1
+
+jobs:
+  build-and-publish:
+    name: Build collection and Publish on Ansible Galaxy
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ansible: [2.9.17, 2.10.5]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - name: Install ansible-base (v${{ matrix.ansible }})
+        run: pip install https://github.com/ansible/ansible/archive/v${{ matrix.ansible }}.tar.gz --disable-pip-version-check
+
+      - name: Build a collection tarball
+        run: pwd && ls -al && find . && ansible-galaxy collection build --output-path "${GITHUB_WORKSPACE}/.cache/collection-tarballs"
+
+      - name: Publish to Ansible Galaxy
+        run: ansible-galaxy collection publish "${GITHUB_WORKSPACE}/.cache/collection-tarballs/${{env.NAMESPACE}}-${{env.COLLECTION_NAME}}-${{env.VERSION}}.tar.gz" --token ${{secrets.API_TOKEN}}
