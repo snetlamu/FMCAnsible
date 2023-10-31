@@ -1,17 +1,8 @@
 name: Publish
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
   push:
-    branches:
-      - ci-cd-test
-
-env:
-  NAMESPACE: snetlamu
-  COLLECTION_NAME: fmcansible
-  VERSION: 0.9.8
+    tags:
+      - "v*"
 
 jobs:
   build-and-publish:
@@ -21,6 +12,12 @@ jobs:
       matrix:
         ansible: [2.10.5]
     steps:
+      - name: Read galaxy.yml
+        uses: pietrobolcato/action-read-yaml@1.0.0
+        id: galaxy
+        with:
+          config: ${{GITHUB_WORKSPACE}}/galaxy.yaml
+
       - name: Check out code
         uses: actions/checkout@v2
 
@@ -36,4 +33,4 @@ jobs:
         run: pwd && ls -al && find . && ansible-galaxy collection build --output-path "${GITHUB_WORKSPACE}/.cache/collection-tarballs"
 
       - name: Publish to Ansible Galaxy
-        run: ansible-galaxy collection publish "${GITHUB_WORKSPACE}/.cache/collection-tarballs/${{env.NAMESPACE}}-${{env.COLLECTION_NAME}}-${{env.VERSION}}.tar.gz" --token ${{secrets.API_TOKEN}}
+        run: ansible-galaxy collection publish "${GITHUB_WORKSPACE}/.cache/collection-tarballs/${{steps.galaxy.outputs['namespace']}}-${{steps.galaxy.outputs['name']}}-${{steps.galaxy.outputs['version']}}.tar.gz" --token ${{secrets.API_TOKEN}}
