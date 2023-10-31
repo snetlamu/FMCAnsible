@@ -27,7 +27,7 @@ jobs:
         run: pwd && ls -al && find . && ansible-galaxy collection build --output-path "${GITHUB_WORKSPACE}/.cache/collection-tarballs"
 
       - name: Read galaxy.yml
-        uses: pietrobolcato/action-read-yaml@1.0.0
+        uses: pietrobolcato/action-read-yaml@1.1.0
         id: galaxy
         with:
           config: ${{github.workspace}}/galaxy.yml
