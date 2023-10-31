@@ -1,8 +1,8 @@
 name: Publish
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - ci-cd-test
 
 jobs:
   build-and-publish:
