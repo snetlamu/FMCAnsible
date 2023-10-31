@@ -12,12 +12,6 @@ jobs:
       matrix:
         ansible: [2.10.5]
     steps:
-      - name: Read galaxy.yml
-        uses: pietrobolcato/action-read-yaml@1.0.0
-        id: galaxy
-        with:
-          config: /github/workspace/galaxy.yaml
-
       - name: Check out code
         uses: actions/checkout@v2
 
@@ -31,6 +25,12 @@ jobs:
 
       - name: Build a collection tarball
         run: pwd && ls -al && find . && ansible-galaxy collection build --output-path "${GITHUB_WORKSPACE}/.cache/collection-tarballs"
+
+      - name: Read galaxy.yml
+        uses: pietrobolcato/action-read-yaml@1.0.0
+        id: galaxy
+        with:
+          config: ${{GITHUB_WORKSPACE}}/galaxy.yaml
 
       - name: Publish to Ansible Galaxy
         run: ansible-galaxy collection publish "${GITHUB_WORKSPACE}/.cache/collection-tarballs/${{steps.galaxy.outputs['namespace']}}-${{steps.galaxy.outputs['name']}}-${{steps.galaxy.outputs['version']}}.tar.gz" --token ${{secrets.API_TOKEN}}
