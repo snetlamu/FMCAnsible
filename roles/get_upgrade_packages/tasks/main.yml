@@ -1,0 +1,47 @@
+---
+# Main tasks file for get_upgrade_packages role
+- name: Get all upgrade packages
+  cisco.fmcansible.fmc_configuration:
+    operation: getAllUpgradePackage
+    register_as: "{{ register_as }}"
+  register: upgrade_packages_result
+
+- name: Set upgrade packages fact
+  set_fact:
+    "{{ register_as }}": "{{ upgrade_packages_result.response.items }}"
+
+- name: Save upgrade packages to JSON file
+  copy:
+    content: "{{ upgrade_packages_result.response | to_nice_json }}"
+    dest: "{{ output_dir }}/upgrade_packages.json"
+  delegate_to: localhost
+  when: save_to_file | bool
+
+- name: Display found upgrade packages
+  debug:
+    msg: "Found {{ upgrade_packages_result.response.items | length }} upgrade package(s): {{ upgrade_packages_result.response.items | map(attribute='name') | list | join(', ') }}"
+
+- name: Find package by version filter
+  set_fact:
+    filtered_package: >-
+      {{ upgrade_packages_result.response.items 
+        | selectattr('name','contains', version_filter)
+        | list | first }}
+  when: 
+    - version_filter is defined 
+    - version_filter | length > 0
+    - filter_by_version | bool
+  failed_when: 
+    - version_filter is defined
+    - filter_by_version | bool
+    - (upgrade_packages_result.response.items | selectattr('name','contains', version_filter) | list | length == 0)
+
+- name: Set filtered package fact
+  set_fact:
+    "{{ register_as }}_filtered": "{{ filtered_package }}"
+  when: filtered_package is defined
+
+- name: Display filtered package
+  debug:
+    msg: "Selected upgrade package: {{ filtered_package.name }} (ID: {{ filtered_package.id }})"
+  when: filtered_package is defined
