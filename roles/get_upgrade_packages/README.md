@@ -39,24 +39,25 @@ This Ansible role retrieves upgrade packages from Cisco Firepower Management Cen
 
 The role sets the following facts:
 
-- `{{ register_as }}` - List of all upgrade packages
-- `{{ register_as }}_filtered` - Filtered package object (when filtering is enabled)
+- `ansible_facts[register_as]` - List of all upgrade packages
+- `ansible_facts[register_as + '_filtered']` - Filtered package object (when filtering is enabled)
 
 ## Example Output
 
 ```yaml
-upgrade_packages:
-  - id: "package-uuid-1"
+ansible_facts:
+  upgrade_packages:
+    - id: "package-uuid-1"
+      name: "Cisco_FTD_SSP_FP2K_Upgrade-7.7.0-89-Hotfix_A.sh"
+      version: "7.7.0.89"
+    - id: "package-uuid-2"
+      name: "Cisco_FTD_SSP_FP2K_Upgrade-7.6.0-1-Hotfix_B.sh"
+      version: "7.6.0.1"
+
+  upgrade_packages_filtered:
+    id: "package-uuid-1"
     name: "Cisco_FTD_SSP_FP2K_Upgrade-7.7.0-89-Hotfix_A.sh"
     version: "7.7.0.89"
-  - id: "package-uuid-2"
-    name: "Cisco_FTD_SSP_FP2K_Upgrade-7.6.0-1-Hotfix_B.sh"
-    version: "7.6.0.1"
-
-upgrade_packages_filtered:
-  id: "package-uuid-1"
-  name: "Cisco_FTD_SSP_FP2K_Upgrade-7.7.0-89-Hotfix_A.sh"
-  version: "7.7.0.89"
 ```
 
 ## License

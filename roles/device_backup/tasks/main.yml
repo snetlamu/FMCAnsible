@@ -23,12 +23,11 @@
 
 - name: Set backup task fact
   set_fact:
-    "{{ register_as }}": "{{ backup_result }}"
-    "{{ register_as }}_task_id": "{{ backup_result.metadata.task.id }}"
+    "{{ register_as }}_task_id": "{{ ansible_facts[register_as].metadata.task.id }}"
 
 - name: Save backup task info to JSON file
   copy:
-    content: "{{ backup_result | to_nice_json }}"
+    content: "{{ ansible_facts[register_as] | to_nice_json }}"
     dest: "{{ output_dir }}/backup_task.json"
   delegate_to: localhost
   when: save_to_file | bool
@@ -37,7 +36,7 @@
   debug:
     msg: 
       - "Backup task initiated successfully"
-      - "Task ID: {{ backup_result.metadata.task.id }}"
+      - "Task ID: {{ ansible_facts[register_as].metadata.task.id }}"
       - "Devices to backup: {{ target_devices | length }}"
 
 - name: Wait for backup completion
@@ -45,7 +44,7 @@
     operation: getTaskStatus
     path_params:
       domainUUID: "{{ domain_uuid }}"
-      objectId: "{{ backup_result.metadata.task.id }}"
+      objectId: "{{ ansible_facts[register_as].metadata.task.id }}"
     register_as: backup_status_check
   register: backup_status
   until: backup_status.response.status == "COMPLETED" or backup_status.response.status == "FAILED"

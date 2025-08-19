@@ -8,27 +8,22 @@
     query_params:
       expanded: "{{ expanded | bool }}"
     register_as: "{{ register_as }}"
-  register: ha_devices_result
-
-- name: Set HA devices fact
-  set_fact:
-    "{{ register_as }}": "{{ ha_devices_result.response.items }}"
 
 - name: Save HA devices to JSON file
   copy:
-    content: "{{ ha_devices_result.response | to_nice_json }}"
+    content: "{{ ansible_facts[register_as] | to_nice_json }}"
     dest: "{{ output_dir }}/ha_devices.json"
   delegate_to: localhost
   when: save_to_file | bool
 
 - name: Display found HA devices
   debug:
-    msg: "Found {{ ha_devices_result.response.items | length }} HA device pair(s): {{ ha_devices_result.response.items | map(attribute='name') | list | join(', ') }}"
+    msg: "Found {{ ansible_facts[register_as] | length }} HA device pair(s): {{ ansible_facts[register_as] | map(attribute='name') | list | join(', ') }}"
 
 - name: Filter HA devices by names
   set_fact:
     filtered_ha_devices: >-
-      {{ ha_devices_result.response.items 
+      {{ ansible_facts[register_as] 
         | selectattr('name','in', ha_pair_names)
         | list }}
   when: 

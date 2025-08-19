@@ -29,7 +29,7 @@
     # Step 3: Get HA devices and build target lists
     - role: get_ha_devices
       vars:
-        domain_uuid: "{{ fmc_domains[0].uuid }}"
+        domain_uuid: "{{ ansible_facts['fmc_domains'][0].uuid }}"
         register_as: ha_devices
         ha_pair_names: "{{ ha_pair_names }}"
         filter_by_names: true
@@ -41,8 +41,8 @@
     # Step 4: Create backup of HA devices
     - role: device_backup
       vars:
-        domain_uuid: "{{ fmc_domains[0].uuid }}"
-        target_devices: "{{ ha_devices_target_containers }}"
+        domain_uuid: "{{ ansible_facts['fmc_domains'][0].uuid }}"
+        target_devices: "{{ ansible_facts['ha_devices_target_containers'] }}"
         register_as: device_backup
         retrieve_to_fmc: true
         wait_for_completion: true
@@ -53,9 +53,9 @@
     # Step 5: Perform readiness check
     - role: device_upgrade
       vars:
-        domain_uuid: "{{ fmc_domains[0].uuid }}"
-        upgrade_package: "{{ upgrade_packages_filtered }}"
-        target_devices: "{{ ha_devices_target_devices }}"
+        domain_uuid: "{{ ansible_facts['fmc_domains'][0].uuid }}"
+        upgrade_package: "{{ ansible_facts['upgrade_packages_filtered'] }}"
+        target_devices: "{{ ansible_facts['ha_devices_target_devices'] }}"
         readiness_check_only: true
         register_as: readiness_check
         wait_for_completion: true
@@ -68,9 +68,9 @@
     # Step 6: Perform actual upgrade
     - role: device_upgrade
       vars:
-        domain_uuid: "{{ fmc_domains[0].uuid }}"
-        upgrade_package: "{{ upgrade_packages_filtered }}"
-        target_devices: "{{ ha_devices_target_devices }}"
+        domain_uuid: "{{ ansible_facts['fmc_domains'][0].uuid }}"
+        upgrade_package: "{{ ansible_facts['upgrade_packages_filtered'] }}"
+        target_devices: "{{ ansible_facts['ha_devices_target_devices'] }}"
         readiness_check_only: false
         enable_upgrade_revert: true
         auto_upgrade_cancel: true
@@ -87,10 +87,10 @@
       debug:
         msg:
           - "=== FTD HA Upgrade Summary ==="
-          - "Domain: {{ fmc_domains[0].name }}"
-          - "Upgrade Package: {{ upgrade_packages_filtered.name }}"
+          - "Domain: {{ ansible_facts['fmc_domains'][0].name }}"
+          - "Upgrade Package: {{ ansible_facts['upgrade_packages_filtered'].name }}"
           - "HA Pairs Upgraded: {{ ha_pair_names | join(', ') }}"
-          - "Backup Status: {{ device_backup_status.status }}"
-          - "Readiness Check Status: {{ readiness_check_status.status }}"
-          - "Upgrade Status: {{ device_upgrade_status.status }}"
+          - "Backup Status: {{ ansible_facts['device_backup_status'].status | default('Not Available') }}"
+          - "Readiness Check Status: {{ ansible_facts['readiness_check_status'].status | default('Not Available') }}"
+          - "Upgrade Status: {{ ansible_facts['device_upgrade_status'].status | default('Not Available') }}"
           - "=== End Summary ==="

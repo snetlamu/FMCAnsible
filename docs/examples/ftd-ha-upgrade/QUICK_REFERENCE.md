@@ -30,7 +30,7 @@
 
 ```yaml
 # Required for most roles
-domain_uuid: "{{ fmc_domains[0].uuid }}"
+domain_uuid: "{{ ansible_facts['fmc_domains'][0].uuid }}"
 
 # Common output options
 save_to_file: true
@@ -55,10 +55,13 @@ verify_success: true
     filter_by_version: true
 
 # Just backup devices
+```yaml
+# Just backup devices
 - role: device_backup
   vars:
-    domain_uuid: "{{ domain_id }}"
-    target_devices: "{{ my_devices }}"
+    domain_uuid: "{{ ansible_facts['fmc_domains'][0].uuid }}"
+    target_devices: "{{ ansible_facts['ha_devices_target_containers'] }}"
+```
 ```
 
 ## Troubleshooting

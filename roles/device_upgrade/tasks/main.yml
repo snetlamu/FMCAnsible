@@ -37,12 +37,11 @@
 
 - name: Set upgrade task fact
   set_fact:
-    "{{ register_as }}": "{{ upgrade_result }}"
-    "{{ register_as }}_task_id": "{{ upgrade_result.metadata.task.id }}"
+    "{{ register_as }}_task_id": "{{ ansible_facts[register_as].metadata.task.id }}"
 
 - name: Save upgrade task info to JSON file
   copy:
-    content: "{{ upgrade_result | to_nice_json }}"
+    content: "{{ ansible_facts[register_as] | to_nice_json }}"
     dest: "{{ output_dir }}/{% if readiness_check_only %}readiness_check{% else %}upgrade{% endif %}_task.json"
   delegate_to: localhost
   when: save_to_file | bool
@@ -51,7 +50,7 @@
   debug:
     msg: 
       - "{% if readiness_check_only %}Readiness check{% else %}Upgrade{% endif %} task initiated successfully"
-      - "Task ID: {{ upgrade_result.metadata.task.id }}"
+      - "Task ID: {{ ansible_facts[register_as].metadata.task.id }}"
       - "Devices: {{ target_devices | length }}"
 
 - name: Wait for task completion
@@ -59,7 +58,7 @@
     operation: getTaskStatus
     path_params:
       domainUUID: "{{ domain_uuid }}"
-      objectId: "{{ upgrade_result.metadata.task.id }}"
+      objectId: "{{ ansible_facts[register_as].metadata.task.id }}"
     register_as: upgrade_status_check
   register: upgrade_status
   until: upgrade_status.response.status == "COMPLETED" or upgrade_status.response.status == "FAILED"

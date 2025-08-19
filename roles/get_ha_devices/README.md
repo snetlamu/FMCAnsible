@@ -46,33 +46,34 @@ This Ansible role retrieves FTD HA device containers from Cisco Firepower Manage
 
 The role sets the following facts:
 
-- `{{ register_as }}` - List of all HA devices
-- `{{ register_as }}_filtered` - Filtered HA devices (when filtering is enabled)
-- `{{ register_as }}_target_containers` - Target container list for operations (when build_target_lists is true)
-- `{{ register_as }}_target_devices` - Target device list for operations (when build_target_lists is true)
+- `ansible_facts[register_as]` - List of all HA devices
+- `ansible_facts[register_as + '_filtered']` - Filtered HA devices (when filtering is enabled)
+- `ansible_facts[register_as + '_target_containers']` - Target container list for operations (when build_target_lists is true)
+- `ansible_facts[register_as + '_target_devices']` - Target device list for operations (when build_target_lists is true)
 
 ## Example Output
 
 ```yaml
-ha_devices:
-  - id: "ha-container-uuid-1"
-    name: "HA-Pair-1"
-    primary:
-      id: "device-uuid-1"
+ansible_facts:
+  ha_devices:
+    - id: "ha-container-uuid-1"
+      name: "HA-Pair-1"
+      primary:
+        id: "device-uuid-1"
+        name: "FTD-Primary-1"
+      secondary:
+        id: "device-uuid-2"
+        name: "FTD-Secondary-1"
+
+  ha_devices_target_containers:
+    - id: "ha-container-uuid-1"
+      type: "HAContainer"
+      name: "HA-Pair-1"
+
+  ha_devices_target_devices:
+    - id: "device-uuid-1"
+      type: "Device"
       name: "FTD-Primary-1"
-    secondary:
-      id: "device-uuid-2"
-      name: "FTD-Secondary-1"
-
-ha_devices_target_containers:
-  - id: "ha-container-uuid-1"
-    type: "HAContainer"
-    name: "HA-Pair-1"
-
-ha_devices_target_devices:
-  - id: "device-uuid-1"
-    type: "Device"
-    name: "FTD-Primary-1"
 ```
 
 ## License

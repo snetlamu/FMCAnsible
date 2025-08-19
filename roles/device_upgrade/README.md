@@ -71,24 +71,25 @@ This Ansible role performs device upgrades and readiness checks in Cisco Firepow
 
 The role sets the following facts:
 
-- `{{ register_as }}` - Upgrade/readiness check task result
-- `{{ register_as }}_task_id` - Task ID for monitoring
-- `{{ register_as }}_status` - Final task status (when wait_for_completion is true)
+- `ansible_facts[register_as]` - Upgrade/readiness check task result
+- `ansible_facts[register_as + '_task_id']` - Task ID for monitoring
+- `ansible_facts[register_as + '_status']` - Final task status (when wait_for_completion is true)
 
 ## Example Output
 
 ```yaml
-device_upgrade:
-  metadata:
-    task:
-      id: "task-uuid-1"
-      name: "Device Upgrade"
+ansible_facts:
+  device_upgrade:
+    metadata:
+      task:
+        id: "task-uuid-1"
+        name: "Device Upgrade"
   
-device_upgrade_task_id: "task-uuid-1"
+  device_upgrade_task_id: "task-uuid-1"
 
-device_upgrade_status:
-  status: "COMPLETED"
-  message: "Upgrade completed successfully"
+  device_upgrade_status:
+    status: "COMPLETED"
+    message: "Upgrade completed successfully"
 ```
 
 ## Readiness Check vs. Upgrade

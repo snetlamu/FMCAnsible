@@ -65,10 +65,14 @@ Each role can be used independently or as part of the complete upgrade workflow:
     version_filter: "7.7.0"
     filter_by_version: true
 
+```yaml
+# Just perform backup
 - role: device_backup
   vars:
-    domain_uuid: "{{ domain_id }}"
-    target_devices: "{{ my_devices }}"
+    domain_uuid: "{{ ansible_facts['fmc_domains'][0].uuid }}"
+    target_devices: "{{ ansible_facts['ha_devices_target_containers'] }}"
+    wait_for_completion: true
+```
 ```
 
 ### Flexible Configuration
@@ -151,7 +155,7 @@ When `save_to_file` is enabled, each role generates JSON output files:
 - name: Custom error handling
   debug:
     msg: "Upgrade failed, but continuing with rollback..."
-  when: device_upgrade_status.status == "FAILED"
+  when: ansible_facts['device_upgrade_status'].status == "FAILED"
 ```
 
 This role-based approach provides a more maintainable and flexible solution for FTD HA upgrades while preserving all the functionality of the original monolithic playbook.

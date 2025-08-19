@@ -52,24 +52,25 @@ This Ansible role creates and monitors device backups in Cisco Firepower Managem
 
 The role sets the following facts:
 
-- `{{ register_as }}` - Backup task result
-- `{{ register_as }}_task_id` - Task ID for monitoring
-- `{{ register_as }}_status` - Final backup status (when wait_for_completion is true)
+- `ansible_facts[register_as]` - Backup task result
+- `ansible_facts[register_as + '_task_id']` - Task ID for monitoring
+- `ansible_facts[register_as + '_status']` - Final backup status (when wait_for_completion is true)
 
 ## Example Output
 
 ```yaml
-device_backup:
-  metadata:
-    task:
-      id: "task-uuid-1"
-      name: "Device Backup"
+ansible_facts:
+  device_backup:
+    metadata:
+      task:
+        id: "task-uuid-1"
+        name: "Device Backup"
   
-device_backup_task_id: "task-uuid-1"
+  device_backup_task_id: "task-uuid-1"
 
-device_backup_status:
-  status: "COMPLETED"
-  message: "Backup completed successfully"
+  device_backup_status:
+    status: "COMPLETED"
+    message: "Backup completed successfully"
 ```
 
 ## Error Handling
