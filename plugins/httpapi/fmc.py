@@ -123,6 +123,17 @@ class HttpApi(HttpApiBase):
         self._use_internal_client = use_internal_client
         self._http_client = None
 
+        import logging
+        logging.basicConfig(filename='/tmp/fmc_ansible_reqs.log', encoding='utf-8', level=logging.DEBUG)
+        logging.error("url")
+        logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+        logging.error("data")
+        logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+        logging.error("response")
+        logging.error("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+
+
+
     @property
     def http_client(self):
         # use separate internal client to manage requests (if available)
