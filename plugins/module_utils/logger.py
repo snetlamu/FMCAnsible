@@ -4,7 +4,7 @@ import logging
 # Configure logging without `encoding` if Python version < 3.9
 logging.basicConfig(
     level=logging.INFO,
-    filename="/tmpfmcansible.log",
+    filename="/tmp/fmcansible.log",
     filemode="a",
     format="%(asctime)s - %(name)s - %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
