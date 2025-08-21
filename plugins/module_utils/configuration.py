@@ -558,14 +558,14 @@ class BaseConfigurationResource(object):
 
     def _send_request(self, url_path, http_method, body_params=None, path_params=None, query_params=None):
         def raise_for_failure(resp):
-            import logging
-            logging.basicConfig(filename='/tmp/fmc_ansible.log', encoding='utf-8', level=logging.DEBUG)
-            logging.error(url_path)
-            logging.error("----------------------------")
-            logging.error(body_params)
-            logging.error("----------------------------")
-            logging.error(resp)
-            logging.error("****************************")
+            # import logging
+            # logging.basicConfig(filename='/tmp/fmc_ansible.log', encoding='utf-8', level=logging.DEBUG)
+            # logging.error(url_path)
+            # logging.error("----------------------------")
+            # logging.error(body_params)
+            # logging.error("----------------------------")
+            # logging.error(resp)
+            # logging.error("****************************")
             if not resp[ResponseParams.SUCCESS]:
                 raise FmcServerError(resp[ResponseParams.RESPONSE], resp[ResponseParams.STATUS_CODE])
 
