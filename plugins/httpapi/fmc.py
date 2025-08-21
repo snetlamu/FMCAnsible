@@ -367,10 +367,20 @@ class HttpApi(HttpApiBase):
         }
 
     def _send(self, url, data, **kwargs):
+        r = None
+        import logging
+        logging.basicConfig(filename='/tmp/fmc_ansible.log', encoding='utf-8', level=logging.DEBUG)
+        logging.error(url)
+        logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+        logging.error(data)
+        logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
         if self.http_client:
-            return self.http_client.send(url, data, **kwargs)
+            r = self.http_client.send(url, data, **kwargs)
         else:
-            return self.connection.send(url, data, **kwargs)
+            r = self.connection.send(url, data, **kwargs)
+        logging.error(r)
+        logging.error("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        return r
 
     def _login(self, username, password):
         if self.http_client:

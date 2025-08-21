@@ -64,14 +64,6 @@ class InternalHttpClient(object):
             headers['X-auth-access-token'] = self.access_token
 
         response = self._send_request(url_path, data, method, headers)
-        import logging
-        logging.basicConfig(filename='/tmp/fmc_ansible.log', encoding='utf-8', level=logging.DEBUG)
-        logging.error(url_path)
-        logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        logging.error(data)
-        logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        logging.error(response)
-        logging.error("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         response_body = self._parse_response_body(response)
         if self._handle_error(response_body, response.status) == 2:
             # Retry send
@@ -128,14 +120,6 @@ class InternalHttpClient(object):
         conn.request(method, url_path, data, headers)
         # response
         response = conn.getresponse()
-        # import logging
-        # logging.basicConfig(filename='/tmp/fmc_ansible.log', encoding='utf-8', level=logging.DEBUG)
-        # logging.error(url_path)
-        # logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        # logging.error(data)
-        # logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        # logging.error(response)
-        # logging.error("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         return response
 
     def _parse_response_body(self, res):
