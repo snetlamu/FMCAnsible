@@ -27,6 +27,8 @@ from functools import partial
 
 from ansible.module_utils.six import iteritems
 
+from ansible_collections.cisco.fmcansible.plugins.module_utils.logger import log_this
+
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, equal_objects, delete_props_not_in_model, \
     FmcServerError, ResponseParams, copy_identity_properties, add_missing_properties_left_to_right, FmcUnexpectedResponse, FmcConfigurationError
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import OperationField, ValidationError
@@ -542,6 +544,7 @@ class BaseConfigurationResource(object):
             list_obj['items'] = []
         return list_obj
 
+    @log_this
     def send_general_request(self, operation_name, params):
         def stop_if_check_mode():
             if self._check_mode:
@@ -556,6 +559,7 @@ class BaseConfigurationResource(object):
 
         return self._send_request(url, method, data, path_params, query_params)
 
+    @log_this
     def _send_request(self, url_path, http_method, body_params=None, path_params=None, query_params=None):
         def raise_for_failure(resp):
             # import logging
