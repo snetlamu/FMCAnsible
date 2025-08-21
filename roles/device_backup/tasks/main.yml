@@ -47,7 +47,7 @@
       objectId: "{{ ansible_facts[register_as].metadata.task.id }}"
     register_as: backup_status_check
   register: backup_status
-  until: backup_status.response.status == "COMPLETED" or backup_status.response.status == "FAILED"
+  until: backup_status_check.status == "COMPLETED" or backup_status_check.status == "FAILED"
   retries: "{{ max_retries }}"
   delay: "{{ retry_delay }}"
   when: wait_for_completion | bool

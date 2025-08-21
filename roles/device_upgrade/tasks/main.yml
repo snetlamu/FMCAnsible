@@ -61,7 +61,7 @@
       objectId: "{{ ansible_facts[register_as].metadata.task.id }}"
     register_as: upgrade_status_check
   register: upgrade_status
-  until: upgrade_status.response.status == "COMPLETED" or upgrade_status.response.status == "FAILED"
+  until: upgrade_status_check.status == "COMPLETED" or upgrade_status_check.status == "FAILED"
   retries: "{{ max_retries }}"
   delay: "{{ retry_delay }}"
   when: wait_for_completion | bool
