@@ -76,6 +76,8 @@ else:
 
 from ansible.module_utils.connection import ConnectionError
 
+from ansible_collections.cisco.fmcansible.plugins.module_utils import log_this
+
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import FmcSwaggerParser, SpecProp, FmcSwaggerValidator
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, ResponseParams
 try:
@@ -111,6 +113,7 @@ except ImportError:
 
 
 class HttpApi(HttpApiBase):
+    @log_this
     def __init__(self, connection, use_internal_client=True):
         super(HttpApi, self).__init__(connection)
         self.connection = connection
@@ -122,17 +125,6 @@ class HttpApi(HttpApiBase):
         self._ignore_http_errors = False
         self._use_internal_client = use_internal_client
         self._http_client = None
-
-        import logging
-        logging.basicConfig(filename='/tmp/fmc_ansible_reqs.log', encoding='utf-8', level=logging.DEBUG)
-        logging.error("url")
-        logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        logging.error("data")
-        logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        logging.error("response")
-        logging.error("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-
-
 
     @property
     def http_client(self):
@@ -377,20 +369,13 @@ class HttpApi(HttpApiBase):
             ResponseParams.RESPONSE: error_msg if error_msg is dict else str(error_msg)
         }
 
+    @log_this
     def _send(self, url, data, **kwargs):
         r = None
-        import logging
-        logging.basicConfig(filename='/tmp/fmc_ansible_reqs.log', encoding='utf-8', level=logging.DEBUG)
-        logging.error(url)
-        logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        logging.error(data)
-        logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
         if self.http_client:
             r = self.http_client.send(url, data, **kwargs)
         else:
             r = self.connection.send(url, data, **kwargs)
-        logging.error(r)
-        logging.error("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         return r
 
     def _login(self, username, password):
