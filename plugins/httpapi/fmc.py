@@ -76,7 +76,7 @@ else:
 
 from ansible.module_utils.connection import ConnectionError
 
-from ansible_collections.cisco.fmcansible.plugins.module_utils import log_this
+from ansible_collections.cisco.fmcansible.plugins.module_utils.logger import log_this
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import FmcSwaggerParser, SpecProp, FmcSwaggerValidator
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, ResponseParams
