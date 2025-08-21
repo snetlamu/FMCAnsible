@@ -31,6 +31,7 @@ import base64
 from urllib import response
 # from urllib.parse import urlencode
 import time
+from ansible_collections.cisco.fmcansible.plugins.module_utils.logger import log_this
 
 # provided for convenience, should be
 LOGIN_PATH = "/api/fmc_platform/v1/auth/generatetoken"
@@ -56,6 +57,7 @@ class InternalHttpClient(object):
         self.access_token = None
         self.refresh_token = None
 
+    @log_this
     def send(self, url_path, data=None, method="GET", headers=None):
         """
         Sends a request to the endpoint and returns the response body.
@@ -105,6 +107,7 @@ class InternalHttpClient(object):
         self.access_token = response_body.getheader("X-auth-access-token")
         self.refresh_token = response_body.getheader("X-auth-refresh-token")
 
+    @log_this
     def _send_request(self, url_path, data=None, method="GET", headers=None):
         """
         Sends a request to the endpoint and returns the raw http client response object.
