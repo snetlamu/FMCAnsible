@@ -268,12 +268,13 @@ class HttpApi(HttpApiBase):
             self._ignore_http_errors = True
             return self._send(path, data, **kwargs)
         except HTTPError as e:
+            error_msg_prefix = "" + e.
             # HttpApi connection does not read the error response from HTTPError, so we do it here and wrap it up in
             # ConnectionError, so the actual error message is displayed to the user.
             error_msg = json.loads(to_text(e.read()))
             raise ConnectionError('%s: %s' % (error_msg_prefix, error_msg), http_code=e.code)
         except Exception as e:
-            raise ConnectionError('%s: %s' % (error_msg_prefix, e), http_code=500)
+            raise ConnectionError('%s: %s' % (error_msg_prefix, e.__traceback__.tb_lineno+ " " + e), http_code=500)
         finally:
             self._ignore_http_errors = False
 
