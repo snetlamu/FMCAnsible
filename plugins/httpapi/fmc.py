@@ -273,7 +273,7 @@ class HttpApi(HttpApiBase):
             error_msg = json.loads(to_text(e.read()))
             raise ConnectionError('%s: %s' % (error_msg_prefix, error_msg), http_code=e.code)
         except Exception as e:
-            raise ConnectionError('%s: %s' % (error_msg_prefix, e.__traceback__.tb_lineno+ " " + e), http_code=500)
+            raise ConnectionError('%s: %s' % (error_msg_prefix, e), http_code=500)
         finally:
             self._ignore_http_errors = False
 
