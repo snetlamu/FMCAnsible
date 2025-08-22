@@ -28,7 +28,7 @@ import json
 import http.client
 import ssl
 import base64
-#from urllib import response
+# from urllib import response
 # from urllib.parse import urlencode
 import time
 from ansible_collections.cisco.fmcansible.plugins.module_utils.logger import log_this
@@ -65,14 +65,14 @@ class InternalHttpClient(object):
         if headers is not None and self.access_token is not None:
             headers['X-auth-access-token'] = self.access_token
 
-        http_response = self._send_request(url_path, data, method, headers)
-        response_body = self._parse_response_body(http_response)
+        response = self._send_request(url_path, data, method, headers)
+        response_body = self._parse_response_body(response)
 
-        if self._handle_error(response_body, http_response.status) == 2:
+        if self._handle_error(response_body, response.status) == 2:
             # Retry send
             self.send(url_path, data, method, headers)
         # return the tuple just like connection.send
-        return http_response, response_body
+        return response, response_body
 
     def send_login(self, username, password):
         """
@@ -103,7 +103,7 @@ class InternalHttpClient(object):
             'X-auth-refresh-token': self.refresh_token
         }
         response_body = self._send_request(REFRESH_PATH, None, "POST", headers)
-        self._handle_error(response_body, response.status())
+        self._handle_error(response_body, response_body.status)
 
         self.access_token = response_body.getheader("X-auth-access-token")
         self.refresh_token = response_body.getheader("X-auth-refresh-token")
