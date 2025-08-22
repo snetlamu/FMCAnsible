@@ -65,14 +65,14 @@ class InternalHttpClient(object):
         if headers is not None and self.access_token is not None:
             headers['X-auth-access-token'] = self.access_token
 
-        response = self._send_request(url_path, data, method, headers)
-        response_body = self._parse_response_body(response)
+        http_response = self._send_request(url_path, data, method, headers)
+        response_body = self._parse_response_body(http_response)
 
-        if self._handle_error(response_body, response.getcode()) == 2:
+        if self._handle_error(response_body, http_response.status) == 2:
             # Retry send
             self.send(url_path, data, method, headers)
         # return the tuple just like connection.send
-        return response, response_body
+        return http_response, response_body
 
     def send_login(self, username, password):
         """
@@ -124,22 +124,6 @@ class InternalHttpClient(object):
         conn.request(method, url_path, data, headers)
         # response
         response = conn.getresponse()
-        import logging
-        logging.basicConfig(filename='/tmp/fmc_client.log', encoding='utf-8', level=logging.DEBUG)
-        logging.error(url_path)
-        logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        logging.error(data)
-        logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        logging.error(response)
-        try:
-            if not response.strip() and url_path != "/api/api-explorer/fmc.json":
-                resdata = response.read()
-                respo = resdata.decode("utf-8")
-                respobject = json.loads(respo)
-                logging.error(respobject)
-        except Exception:
-            logging.error("Empty response")
-        logging.error("---------------------------------")
         return response
 
     def _parse_response_body(self, res):
