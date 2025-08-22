@@ -268,7 +268,6 @@ class HttpApi(HttpApiBase):
             self._ignore_http_errors = True
             return self._send(path, data, **kwargs)
         except HTTPError as e:
-            error_msg_prefix = "" + e.
             # HttpApi connection does not read the error response from HTTPError, so we do it here and wrap it up in
             # ConnectionError, so the actual error message is displayed to the user.
             error_msg = json.loads(to_text(e.read()))
