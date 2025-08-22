@@ -123,18 +123,18 @@ class InternalHttpClient(object):
         conn.request(method, url_path, data, headers)
         # response
         response = conn.getresponse()
-        import logging
-        logging.basicConfig(filename='/tmp/fmc_client.log', encoding='utf-8', level=logging.DEBUG)
-        logging.error(url_path)
-        logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        logging.error(data)
-        logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        if response != None:
-            resdata = response.read()
-            respo = resdata.decode("utf-8")
-            respobject = json.loads(respo)
-            logging.error(respobject)
-        logging.error("---------------------------------")
+        # import logging
+        # logging.basicConfig(filename='/tmp/fmc_client.log', encoding='utf-8', level=logging.DEBUG)
+        # logging.error(url_path)
+        # logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+        # logging.error(data)
+        # logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+        # if response != None:
+        #     resdata = response.read()
+        #     respo = resdata.decode("utf-8")
+        #     respobject = json.loads(respo)
+        #     logging.error(respobject)
+        # logging.error("---------------------------------")
         return response
 
     def _parse_response_body(self, res):
