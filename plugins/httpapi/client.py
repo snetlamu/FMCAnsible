@@ -129,7 +129,10 @@ class InternalHttpClient(object):
         logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
         logging.error(data)
         logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        logging.error(self._parse_response_body(response))
+        resdata = response.read()
+        respo = resdata.decode("utf-8")
+        respobject = json.loads(respo)
+        logging.error(respobject)
         logging.error("---------------------------------")
         return response
 
