@@ -300,7 +300,7 @@ class HttpApi(HttpApiBase):
             response, response_data = self._send(url, data, method=http_method, headers=BASE_HEADERS)
 
             import logging
-            logging.basicConfig(filename='/tmp/fmc_client.log', encoding='utf-8', level=logging.DEBUG)
+            logging.basicConfig(filename='/Users/snetlamu/Tasks/upgrade to role/test/ftd-ha-upgrade/fmc_client.log', encoding='utf-8', level=logging.DEBUG)
             logging.error(url)
             logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
             logging.error(data)
