@@ -67,7 +67,8 @@ class InternalHttpClient(object):
 
         response = self._send_request(url_path, data, method, headers)
         response_body = self._parse_response_body(response)
-        if self._handle_error(response_body, response.status) == 2:
+
+        if self._handle_error(response_body, response.getcode()) == 2:
             # Retry send
             self.send(url_path, data, method, headers)
         # return the tuple just like connection.send
@@ -102,7 +103,7 @@ class InternalHttpClient(object):
             'X-auth-refresh-token': self.refresh_token
         }
         response_body = self._send_request(REFRESH_PATH, None, "POST", headers)
-        self._handle_error(response_body, response.status)
+        self._handle_error(response_body, response.getcode())
 
         self.access_token = response_body.getheader("X-auth-access-token")
         self.refresh_token = response_body.getheader("X-auth-refresh-token")
