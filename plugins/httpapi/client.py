@@ -131,7 +131,7 @@ class InternalHttpClient(object):
         logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
         logging.error(response)
         try:
-            if response != None and url_path != "/api/api-explorer/fmc.json":
+            if not response.strip() and url_path != "/api/api-explorer/fmc.json":
                 resdata = response.read()
                 respo = resdata.decode("utf-8")
                 respobject = json.loads(respo)
