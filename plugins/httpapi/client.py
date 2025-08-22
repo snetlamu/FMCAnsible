@@ -28,7 +28,7 @@ import json
 import http.client
 import ssl
 import base64
-from urllib import response
+#from urllib import response
 # from urllib.parse import urlencode
 import time
 from ansible_collections.cisco.fmcansible.plugins.module_utils.logger import log_this
