@@ -98,7 +98,6 @@ class InternalHttpClient(object):
 
     def send_refresh_token(self):
         headers = {
-            'Content-Type': 'application/json',
             'X-auth-access-token': self.access_token,
             'X-auth-refresh-token': self.refresh_token
         }
@@ -107,11 +106,6 @@ class InternalHttpClient(object):
 
         self.access_token = response_body.getheader("X-auth-access-token")
         self.refresh_token = response_body.getheader("X-auth-refresh-token")
-
-        return {
-            'access_token': self.access_token,
-            'refresh_token': self.refresh_token
-        }
 
     @log_this
     def _send_request(self, url_path, data=None, method="GET", headers=None):
@@ -151,7 +145,7 @@ class InternalHttpClient(object):
         msg = err.get('data') or err.get('message') or iter_messages(err.get('messages'))
 
         if 'Access token invalid' in msg:
-            self.access_token, self.refresh_token = self.send_refresh_token()
+            self.send_refresh_token()
             return 2
 
         if 'Invalid refresh token' in msg:
