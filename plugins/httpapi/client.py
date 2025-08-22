@@ -98,6 +98,7 @@ class InternalHttpClient(object):
 
     def send_refresh_token(self):
         headers = {
+            'Content-Type': 'application/json',
             'X-auth-access-token': self.access_token,
             'X-auth-refresh-token': self.refresh_token
         }
@@ -148,7 +149,7 @@ class InternalHttpClient(object):
             self.send_refresh_token()
             return 2
 
-        if 'Invalid refresh token' in msg:
+        if 'Invalid refresh token' in msg or 'Max number of refresh' in msg:
             self.send_login(self.username, self.password)
             return 2
 
