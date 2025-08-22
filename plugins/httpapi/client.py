@@ -151,7 +151,7 @@ class InternalHttpClient(object):
         msg = err.get('data') or err.get('message') or iter_messages(err.get('messages'))
 
         if 'Access token invalid' in msg:
-            self.send_refresh_token()
+            self.access_token, self.refresh_token = self.send_refresh_token()
             return 2
 
         if 'Invalid refresh token' in msg:
