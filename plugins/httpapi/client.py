@@ -129,7 +129,7 @@ class InternalHttpClient(object):
         logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
         logging.error(data)
         logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        if response:
+        if response != None:
             resdata = response.read()
             respo = resdata.decode("utf-8")
             respobject = json.loads(respo)
