@@ -299,6 +299,16 @@ class HttpApi(HttpApiBase):
 
             response, response_data = self._send(url, data, method=http_method, headers=BASE_HEADERS)
 
+            import logging
+            logging.basicConfig(filename='/tmp/fmc_client.log', encoding='utf-8', level=logging.DEBUG)
+            logging.error(url)
+            logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+            logging.error(data)
+            logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+            logging.error(response)
+            logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+            logging.error(response_data)
+            logging.error("---------------------------------")
             # response_data is bytearray, so convert to string
             value = self._get_response_value(response_data)
             self._display(http_method, 'response', value)
