@@ -136,7 +136,7 @@ class InternalHttpClient(object):
                 respo = resdata.decode("utf-8")
                 respobject = json.loads(respo)
                 logging.error(respobject)
-        except:
+        except Exception:
             logging.error("Empty response")
         logging.error("---------------------------------")
         return response
