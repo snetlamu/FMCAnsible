@@ -130,11 +130,14 @@ class InternalHttpClient(object):
         logging.error(data)
         logging.error("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
         logging.error(response)
-        if response != None and url_path != "/api/api-explorer/fmc.json":
-            resdata = response.read()
-            respo = resdata.decode("utf-8")
-        #     respobject = json.loads(respo)
-            logging.error(respo)
+        try:
+            if response != None and url_path != "/api/api-explorer/fmc.json":
+                resdata = response.read()
+                respo = resdata.decode("utf-8")
+            #     respobject = json.loads(respo)
+                logging.error(respo)
+        except JSONDecodeError:
+            logging.error("Empty response")
         logging.error("---------------------------------")
         return response
 
