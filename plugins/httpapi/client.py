@@ -104,7 +104,7 @@ class InternalHttpClient(object):
         }
         #response_body will be a HTTPResponse
         response_body = self._send_request(REFRESH_PATH, None, "POST", headers)
-        self._handle_error(self._parse_response_body(response_body), response_body.status)
+        self._handle_error(response_body, response_body.status)
 
         self.access_token = response_body.getheader("X-auth-access-token")
         self.refresh_token = response_body.getheader("X-auth-refresh-token")
