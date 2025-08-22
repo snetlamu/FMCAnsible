@@ -108,6 +108,11 @@ class InternalHttpClient(object):
         self.access_token = response_body.getheader("X-auth-access-token")
         self.refresh_token = response_body.getheader("X-auth-refresh-token")
 
+        return {
+            'access_token': self.access_token,
+            'refresh_token': self.refresh_token
+        }
+
     @log_this
     def _send_request(self, url_path, data=None, method="GET", headers=None):
         """
